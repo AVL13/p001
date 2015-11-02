@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns="http://ns.adobe.com/f4m/1.0">
+	<id>2b5c249bf7bc4904aca37b3e0dfffd7e.mp4</id>
+	<streamType>recorded</streamType>
+	<duration>25.045</duration>
+	<bootstrapInfo profile="named" id="bootstrap61027">
+	AAAAimFic3QAAAAAAAAAAwAAAAPoAAAAAAAAYdUAAAAAAAAAAAAAAAAAAQAAABlhc3J0AAAAAAAAAAABAAAAAQAAAAMBAAAARWFmcnQAAAAAAAAD6AAAAAADAAAAAQAAAAAAAAAAAAApQAAAAAIAAAAAAAApQAAAKUAAAAADAAAAAAAAUoAAAA9V
+	</bootstrapInfo>
+	<media streamId="2b5c249bf7bc4904aca37b3e0dfffd7e.mp4" url="2b5c249bf7bc4904aca37b3e0dfffd7e.mp4" bootstrapInfoId="bootstrap61027">
+	<metadata>	AgAKb25NZXRhRGF0YQgAAAAHAAhkdXJhdGlvbgBAOQua8Yht+AAMdmlkZW9jb2RlY2lkAgAEYXZjMQAFd2lkdGgAQIQAAAAAAAAABmhlaWdodABAdoAAAAAAAAAMYXVkaW9jb2RlY2lkAgAEbXA0YQANYXVkaW9jaGFubmVscwBAAAAAAAAAAAAPYXVkaW9zYW1wbGVyYXRlAEDliIAAAAAAAAAJ
+	</metadata>	</media>
+</manifest>
