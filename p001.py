@@ -20,7 +20,7 @@ dick = { 'SI8': 'b', 'UI8': 'B', 'SI16': '>h', 'UI16': '>H',
          'SI32': '>i', 'UI32': '>I', 'SI64': '>q', 'UI64': '>Q' }
 
 
-def f(scheme, data):
+def f(scheme, data, parent=None):
     ordered_dict = collections.OrderedDict()
     current_bit = 0
     for v in scheme:
@@ -38,13 +38,16 @@ def f(scheme, data):
                 if 1 != len(v[1]):
                     raise Exception('Incorrect Type specification for ' + v[0])
                 if isinstance(v[1][0], tuple):
-                    ordered_dict[v[0]] = f(v[1][0], data)  # Size ??
+                    ordered_dict[v[0]] = f(v[1][0], data, ordered_dict)  # Size ??
                 elif isinstance(v[1][0], str):
                     ordered_dict[v[0]] = v[1][0]
                 else:
                     raise Exception('Invalid Type specification for ' + v[0])
             elif isinstance(v[2], tuple):
-                pass
+                if v[2][0].find('.') == -1:
+                    pass
+                else:
+                    pass
             else:
                 raise Exception('Invalid Size or Condition field for ' + v[0])
         elif len(v) == 4:  # Type & Cond & Size
@@ -62,7 +65,7 @@ if __name__ == '__main__':
                  ('ExtendedSize', ('UI64', None), ('TotalSize', '==', 1))
     )
     AFRAENTRY = (('Time', ('UI64',)),
-                 ('Offset', ('UI32', 'UI64',), ('LongOffsets', '==', 0))
+                 ('Offset', ('UI32', 'UI64',), ('.LongOffsets', '==', 0))
     )
     GLOBALAFRAENTRY = (('Time', ('UI64',)),
                        ('Segment', ('UI16', 'UI32'), ('LongIDs', '==', 0)),
