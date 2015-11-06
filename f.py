@@ -1,6 +1,6 @@
 
 import collections
-import pprint
+
 
 TOP = -1
 NAME = ITER = 0
@@ -37,22 +37,21 @@ def f(scheme, data, length=1, bit=0):
                     # заполнение res
                 stack[TOP][RESULT].update({name: res})
             else:
+                res = collections.OrderedDict()
                 if quantity == 1:
-                    res = collections.OrderedDict()
                     stack[TOP][RESULT].update({name: res})
                     stack.append([iter(type_), type_, quantity - 1, res, None])
                 else:
                     lst = list()
-                    res = collections.OrderedDict()
                     lst.append(res)
                     stack[TOP][RESULT].update({name: lst})
                     stack.append([iter(type_), type_, quantity - 1, res, lst])
+                    # raise StopIteration ???
 
         except StopIteration:
             if stack[TOP][CNT] != 0:
                 if stack[TOP][CNT] > 0:
                     stack[TOP][CNT] -= 1
-                # if stack[TOP][4]:
                 res = collections.OrderedDict()
                 stack[TOP][4].append(res)
                 stack[TOP][RESULT] = res
@@ -64,6 +63,8 @@ def f(scheme, data, length=1, bit=0):
 
 
 if __name__ == '__main__':
+    import pprint
+
     sschema = (
             ('a', 1, 1),
             ('b', (('ba', 2, 2),), 3),
