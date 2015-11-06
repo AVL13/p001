@@ -8,59 +8,71 @@ SCHEMA = TYPE = 1
 CNT = 2
 RESULT = 3
 
-schema = (
-        ('a', 1, 1),
-        ('b', (('ba', 2, 2),), 1),
-        ('c', 3, 0),
-        ('d', (('da', 4, 1),
-               ('db', 5, 1),
-               ('dc', (('dca', 6, 0), ('dcb', 7, 2), ('dcc', 8, 1)), 1),
-               ('dd', 9, 1)), 1)
-)
 
-result = collections.OrderedDict()
+def f(scheme, data, length=1, bit=0):
 
-stack = [[iter(schema), schema, 0, result]]
+    result = collections.OrderedDict()
+    lstt = None
+    stack = []
 
+    if length != 0:
+        if length != 1:
+            lstt = list()
+            lstt.append(result)
+        stack.append([iter(scheme), scheme, length - 1, result, lstt])
 
-while stack:
-    try:
-        cur_si = next(stack[TOP][ITER])
+    while stack:
+        try:
+            name, type_, quantity = next(stack[TOP][ITER])
 
-        if cur_si[CNT] == 0:
-            print(cur_si[NAME], type(cur_si[TYPE]))
-            continue
+            if quantity == 0:
+                print(name, type(type_))
+                continue
 
-        if isinstance(cur_si[TYPE], int):
-            if cur_si[CNT] == 1:
-                res = cur_si[TYPE] + 100
+            if isinstance(type_, int):
+                if quantity == 1:
+                    res = type_ + 100
+                else:
+                    res = []
+                    # заполнение res
+                stack[TOP][RESULT].update({name: res})
             else:
-                res = []
-                # заполнение res
-            stack[TOP][RESULT].update({cur_si[NAME]: res})
-        else:
-            res = collections.OrderedDict()
-            stack[TOP][RESULT].update({cur_si[NAME]: res})
-            stack.append([iter(cur_si[TYPE]), cur_si[TYPE], cur_si[CNT]-1, res])
+                if quantity == 1:
+                    res = collections.OrderedDict()
+                    stack[TOP][RESULT].update({name: res})
+                    stack.append([iter(type_), type_, quantity - 1, res, None])
+                else:
+                    lst = list()
+                    res = collections.OrderedDict()
+                    lst.append(res)
+                    stack[TOP][RESULT].update({name: lst})
+                    stack.append([iter(type_), type_, quantity - 1, res, lst])
 
-    except StopIteration:
-        if stack[TOP][CNT] != 0:
-            if stack[TOP][CNT] > 0:
-                stack[TOP][CNT] -= 1
-            stack[TOP][ITER] = iter(stack[TOP][SCHEMA])
-        else:
-            stack.pop()
+        except StopIteration:
+            if stack[TOP][CNT] != 0:
+                if stack[TOP][CNT] > 0:
+                    stack[TOP][CNT] -= 1
+                # if stack[TOP][4]:
+                res = collections.OrderedDict()
+                stack[TOP][4].append(res)
+                stack[TOP][RESULT] = res
+                stack[TOP][ITER] = iter(stack[TOP][SCHEMA])
+            else:
+                stack.pop()
+
+    return lstt if lstt else result
 
 
-pp = pprint.PrettyPrinter(indent=2)
-pp.pprint(result)
-# pp.pprint(schema)
+if __name__ == '__main__':
+    sschema = (
+            ('a', 1, 1),
+            ('b', (('ba', 2, 2),), 3),
+            ('c', 3, 0),
+            ('d', (('da', 4, 1),
+                   ('db', 5, 1),
+                   ('dc', (('dca', 6, 0), ('dcb', 7, 2), ('dcc', 8, 1)), 2),
+                   ('dd', 9, 1)), 2)
+    )
 
-
-def f(L):
-    L.append(8)
-
-l = []
-f(l)
-f(l)
-# print(l)
+    pp = pprint.PrettyPrinter(indent=2)
+    pp.pprint(f(sschema, None, 2))
