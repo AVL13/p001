@@ -3,23 +3,23 @@ import collections
 
 
 TOP = -1
-NAME = ITER = 0
-SCHEMA = TYPE = 1
-CNT = 2
-RESULT = 3
+ITER = 0
+RESULT = 1
+QUANTITY = 2
+SCHEME = 3
+LST = 4
 
 
-def f(scheme, data, length=1, bit=0):
+def f(scheme, data, counter=1, bit=0):
 
     result = collections.OrderedDict()
-    lstt = None
+    lst = list()
     stack = []
 
-    if length != 0:
-        if length != 1:
-            lstt = list()
-            lstt.append(result)
-        stack.append([iter(scheme), scheme, length - 1, result, lstt])
+    if counter != 0:
+        if counter != 1:
+            lst.append(result)
+        stack.append([iter(scheme), result, counter - 1, scheme, lst])
 
     while stack:
         try:
@@ -31,35 +31,35 @@ def f(scheme, data, length=1, bit=0):
 
             if isinstance(type_, int):
                 if quantity == 1:
-                    res = type_ + 100
+                    val = type_ + 100
                 else:
-                    res = []
+                    val = []
                     # заполнение res
-                stack[TOP][RESULT].update({name: res})
+                stack[TOP][RESULT].update({name: val})
             else:
-                res = collections.OrderedDict()
+                val_dict = collections.OrderedDict()
                 if quantity == 1:
-                    stack[TOP][RESULT].update({name: res})
-                    stack.append([iter(type_), type_, quantity - 1, res, None])
+                    stack[TOP][RESULT].update({name: val_dict})
+                    stack.append([iter(type_), val_dict, 0])
                 else:
-                    lst = list()
-                    lst.append(res)
-                    stack[TOP][RESULT].update({name: lst})
-                    stack.append([iter(type_), type_, quantity - 1, res, lst])
+                    val_lst = list()
+                    val_lst.append(val_dict)
+                    stack[TOP][RESULT].update({name: val_lst})
+                    stack.append([iter(type_), val_dict, quantity - 1,  type_, val_lst])
                     # raise StopIteration ???
 
         except StopIteration:
-            if stack[TOP][CNT] != 0:
-                if stack[TOP][CNT] > 0:
-                    stack[TOP][CNT] -= 1
-                res = collections.OrderedDict()
-                stack[TOP][4].append(res)
-                stack[TOP][RESULT] = res
-                stack[TOP][ITER] = iter(stack[TOP][SCHEMA])
+            if stack[TOP][QUANTITY] != 0:
+                if stack[TOP][QUANTITY] > 0:
+                    stack[TOP][QUANTITY] -= 1
+                val_dict = collections.OrderedDict()
+                stack[TOP][LST].append(val_dict)
+                stack[TOP][RESULT] = val_dict
+                stack[TOP][ITER] = iter(stack[TOP][SCHEME])
             else:
                 stack.pop()
 
-    return lstt if lstt else result
+    return lst if lst else result
 
 
 if __name__ == '__main__':
