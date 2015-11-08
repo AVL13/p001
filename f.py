@@ -24,6 +24,7 @@ def f(scheme, data, counter=1, bit=0):
     while stack:
         try:
             name, type_, quantity = next(stack[TOP][ITER])
+            type_, quantity = parse_scheme_item(type_, quantity)
 
             if quantity == 0:
                 print(name, type(type_))
@@ -31,7 +32,7 @@ def f(scheme, data, counter=1, bit=0):
 
             if isinstance(type_, int):
                 if quantity == 1:
-                    val = type_ + 100
+                    val = type_ * 2
                 else:
                     val = []
                     # заполнение res
@@ -59,7 +60,18 @@ def f(scheme, data, counter=1, bit=0):
             else:
                 stack.pop()
 
-    return lst if lst else result
+    return lst or result
+
+
+def parse_scheme_item(type_, quantity):
+    # print(type_, quantity)
+    return type_, quantity
+
+
+def parse_data(data, type_, bit):
+    if type_ & 0xFFFFFF00 == 0:
+        pass
+
 
 
 if __name__ == '__main__':
@@ -76,4 +88,6 @@ if __name__ == '__main__':
     )
 
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(f(sschema, None, 2))
+    pp.pprint(f(sschema, None, 1))
+
+    # print(parse_data(b'\x01\x02\x03\x04\x05\x06\x07', 'UI16', 8))
